@@ -1,0 +1,841 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Locvye">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Effective C++1.让自己习惯C++条款01：将C++视为一个语言联邦 &#x3D;&#x3D;C++高效编程守则视状况而变化，取决于使用C++的那一部分&#x3D;&#x3D;  可将C++视为以下四个次语言，每个次语言都有自己的规约  C，很多基础的内容，blocks、statements、preprocessor、built-in data types、arrays pointer">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Effective C++">
+<meta property="og:url" content="http://example.com/2022/11/24/Effective-C/index.html">
+<meta property="og:site_name" content="Locvye Blog">
+<meta property="og:description" content="Effective C++1.让自己习惯C++条款01：将C++视为一个语言联邦 &#x3D;&#x3D;C++高效编程守则视状况而变化，取决于使用C++的那一部分&#x3D;&#x3D;  可将C++视为以下四个次语言，每个次语言都有自己的规约  C，很多基础的内容，blocks、statements、preprocessor、built-in data types、arrays pointer">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-11-24T13:51:18.000Z">
+<meta property="article:modified_time" content="2022-11-24T13:52:03.621Z">
+<meta property="article:author" content="Locvye">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Effective C++ - Locvye Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Locvye</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/a.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Effective C++"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-24 21:51" pubdate>
+          2022年11月24日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          21k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          174 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Effective C++</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Effective-C"><a href="#Effective-C" class="headerlink" title="Effective C++"></a>Effective C++</h1><h2 id="1-让自己习惯C"><a href="#1-让自己习惯C" class="headerlink" title="1.让自己习惯C++"></a>1.让自己习惯C++</h2><h3 id="条款01：将C-视为一个语言联邦"><a href="#条款01：将C-视为一个语言联邦" class="headerlink" title="条款01：将C++视为一个语言联邦"></a>条款01：将C++视为一个语言联邦</h3><ul>
+<li>&#x3D;&#x3D;C++高效编程守则视状况而变化，取决于使用C++的那一部分&#x3D;&#x3D;</li>
+</ul>
+<p>可将C++视为以下四个次语言，每个次语言都有自己的规约</p>
+<ul>
+<li>C，很多基础的内容，blocks、statements、preprocessor、built-in data types、arrays pointers等统统来自C语言</li>
+<li>Object-Oriented C++，C with Classes，使C具有面向对象能力</li>
+<li>Template C++，泛型编程</li>
+<li>STL，是个template程序库</li>
+</ul>
+<p>对于内置类型，pass-by-value比pass-by-reference高效<br>对于自定义的类，有构造函数和析构函数，pass-by-reference-to-const往往更好，尤其是在泛型编程中，传进来的数据类型都不确定，所以经常需要加上const<br>在STL中，迭代器和函数对象都是在C指针基础上塑造的，所以pass-by-value适用</p>
+<h3 id="条款02：尽量以const，enum，inline替代-define"><a href="#条款02：尽量以const，enum，inline替代-define" class="headerlink" title="条款02：尽量以const，enum，inline替代#define"></a>条款02：尽量以const，enum，inline替代#define</h3><ul>
+<li>&#x3D;&#x3D;尽量多的使用const、enums、inlines代替#define&#x3D;&#x3D;</li>
+<li>&#x3D;&#x3D;其他很必要的预处理器还有#include、#ifdef&#x2F;#ifndef&#x3D;&#x3D;</li>
+</ul>
+<p>宁可以编译器替换预处理器</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> ASPECT_RATIO 1.653</span><br></code></pre></td></tr></table></figure>
+
+<p>宏定义不被视为语言的一部分，编译器处理源码之前可能就被预处理器移走，于是它可能没进入记号表（symbol table）<br>所以当bug出现在#define中，调试起来就会麻烦，可以用常量替换上述宏</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//解决方法: 用常量替换上述的宏（#define）:</span><br><span class="hljs-type">const</span> <span class="hljs-type">double</span> AspectRatio = <span class="hljs-number">1.653</span>;<br></code></pre></td></tr></table></figure>
+
+<p>定义常量指针，常量定义式通常放在头文件，有必要将指针（不只是所指内容）声明为const，这就需要用两次const</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-type">const</span> authorName = <span class="hljs-string">&quot;Yshen&quot;</span>;<br></code></pre></td></tr></table></figure>
+
+<p>同时 string 对象通常比char*-based合宜</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">const</span> std::string authorName1 = <span class="hljs-string">&quot;Yshen&quot;</span>;<br></code></pre></td></tr></table></figure>
+
+<p>class专属常量，为了将常量作用域限制于class内，必须让它成为class的一个成员，为确保只有一份实体，必须让它成为static成员</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">GamePlayer</span> &#123;<br><span class="hljs-keyword">private</span>:<br>	<span class="hljs-type">static</span> <span class="hljs-type">const</span> <span class="hljs-type">int</span> Num = <span class="hljs-number">5</span>;<span class="hljs-comment">//常量声明</span><br>	<span class="hljs-type">int</span> scores[Num];<span class="hljs-comment">//使用常量</span><br>	<span class="hljs-type">static</span> <span class="hljs-type">const</span> <span class="hljs-type">double</span> Num1;<span class="hljs-comment">//常量声明，in-class初值设定只允许对整数常量进行</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>上面例子中，Num为声明而非定义，通常c++要求对使用的任何东西提供定义，如果它是class专属常量又是static且为整数类型，则特殊处理<br>只要不取地址，可以声明并使用他们而无须提供定义<br>但如果要取某个class专属常量地址，或编译器坚持看到定义式，就要提供</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">const</span> <span class="hljs-type">int</span> GamePlayer::Num;<span class="hljs-comment">//定义式，但没有给予数值，因为class常量在声明时获得了初值，定义时不可再设初值</span><br></code></pre></td></tr></table></figure>
+
+<p>常量定义，当编译器不允许在static成员在声明式上给初值时，只能将初值设定放在定义上</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">CostEstimate</span> &#123;<br>    <span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">static</span> <span class="hljs-type">const</span> <span class="hljs-type">double</span> FudgeFactor; <span class="hljs-comment">//static class 常量声明,位于头文件</span><br>&#125;<br><span class="hljs-type">const</span> <span class="hljs-type">double</span> CostEstimate::FudgeFactor = <span class="hljs-number">1.3</span>;<span class="hljs-comment">//static class常量定义，位于实现文件内</span><br></code></pre></td></tr></table></figure>
+
+
+
+<p>并且，#define无法创建一个class专属常量，因为#define并不重视作用域<br>另外，有些编译器不支持static整数型class常量完成in-class初值设定，可以换用”the enum hack”补偿做法，</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Widget</span> &#123;<br><span class="hljs-keyword">private</span>:<br>	<span class="hljs-keyword">enum</span> &#123; NUM = <span class="hljs-number">5</span> &#125;;<span class="hljs-comment">//枚举令NUM作为5的记号</span><br>	<span class="hljs-type">int</span> arr[NUM];<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>枚举在行为上类似#define，例如取const变量的地址是合法的，而取enum的地址不合法，取#define的地址通常也不合法<br>如果不想让别人获得一个指针或者引用指向你的某个常量，可以使用enum来实现约束</p>
+<p>另一个误用情况，用#define实现宏（macros），看起来像函数，但不会招致函数调用带来的额外开销</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//下面的宏夹杂宏参数，调用函数f</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CALL_WITH_MAX(a,b) f((a)&gt;(b)?(a):(b))</span><br><span class="hljs-comment">//这样的表达式要为所有实参加上括号，并且即使加了小括号，也可能有问题，例如</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">f</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span> </span>&#123;&#125;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">test_define</span><span class="hljs-params">()</span> </span>&#123;<br>	<span class="hljs-type">int</span> a = <span class="hljs-number">5</span>, b = <span class="hljs-number">0</span>;<br>	<span class="hljs-built_in">CALL_WITH_MAX</span>(++a, b);<span class="hljs-comment">//a被累加两次</span><br>	<span class="hljs-built_in">CALL_WITH_MAX</span>(++a, b + <span class="hljs-number">10</span>);<span class="hljs-comment">//a被累加一次</span><br>	<span class="hljs-comment">//因为根据上述宏定义，比较时累加一次，决定选用a时又累加了一次，所以这样的宏定义并不好</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>对于此问题，如果既想获得宏带来的效率以及一般函数的可预料行为和类型安全，可以使用template inline函数</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;</span><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">callWithMax</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; a, <span class="hljs-type">const</span> T&amp; b)</span> </span>&#123;<span class="hljs-comment">//无法预知T是什么，所以采用pass by reference-to-const</span><br>	<span class="hljs-built_in">f</span>(a &gt; b ? a : b);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>​                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       </p>
+<p>###条款03：尽可能使用const</p>
+<ul>
+<li>&#x3D;&#x3D;将某些东西声明成const可帮助编译器侦测出错误用法。const可被施加于任何作用域内的对象，函数参数，函数返回类型，成员函数本体&#x3D;&#x3D;</li>
+<li>&#x3D;&#x3D;编译器强制实施bitwise constness ，但你编写程序时应该使用”概念上的常量性“&#x3D;&#x3D;</li>
+<li>&#x3D;&#x3D;当const和non-const成员函数有着实质等价的实现时，令non-const版本调用const版本可避免代码重复&#x3D;&#x3D;</li>
+</ul>
+<p>const，指定一个语义约束——不该被改动的对象，编译器会强制实施<br>可以修饰的有，classes外部global作用域或namespace中的常量，或修饰文件、函数、区块中被声明为static的对象<br>还可以修饰classes内部的static和non-static成员变量，对于指针可以修饰指针自身和指针所指内容</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">char</span> greeting[] = <span class="hljs-string">&quot;Hello&quot;</span>;<br><span class="hljs-type">char</span>* p1 = greeting;<span class="hljs-comment">//non-const pointer,non-const data</span><br><span class="hljs-type">const</span> <span class="hljs-type">char</span>* p2 = greeting;<span class="hljs-comment">//non-const pointer,const data</span><br><span class="hljs-type">char</span>* <span class="hljs-type">const</span> p3 = greeting;<span class="hljs-comment">//const pointer,non-const data</span><br><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-type">const</span> p4 = greeting;<span class="hljs-comment">//const pointer,const data</span><br><span class="hljs-comment">//简单的说就是将const右边的东西修饰为不可改变</span><br><span class="hljs-comment">//写在星号左边，可看成修饰*p，也就是所指内容，表示值不可变</span><br><span class="hljs-comment">//写在星号右边，则修饰的是p，也就是指针本身，表示指向地址不变</span><br><span class="hljs-comment">//以下两种写法是一样的</span><br><span class="hljs-type">const</span> <span class="hljs-type">char</span>* p5 = greeting;<br><span class="hljs-type">char</span> <span class="hljs-type">const</span>* p6 = greeting;<br></code></pre></td></tr></table></figure>
+
+<p>STL的迭代器相当于T指针，声明迭代器为const就像声明指针为const（T<em>const），表示迭代器不得指向不同东西，但所指东西的值可以改动<br>如果需要的是所指东西不可改动（即const T</em>)，需要的是const_iteror；</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++">std::vector&lt;<span class="hljs-type">int</span>&gt; vec;<br>vec.<span class="hljs-built_in">push_back</span>(<span class="hljs-number">0</span>);<br><span class="hljs-type">const</span> std::vector&lt;<span class="hljs-type">int</span>&gt;::iterator iter = vec.<span class="hljs-built_in">begin</span>();<span class="hljs-comment">//iter是一个T* const</span><br>*iter = <span class="hljs-number">10</span>;<span class="hljs-comment">//没问题，改变的是iter所指内容</span><br><span class="hljs-comment">//++iter;//error,iter是const，所以不能操作</span><br>std::vector&lt;<span class="hljs-type">int</span>&gt;::const_iterator cIter = vec.<span class="hljs-built_in">begin</span>();<span class="hljs-comment">//cIter是一个const T*</span><br><span class="hljs-comment">//*cIter = 10;//error,*cIter是const的，不能改变所指内容</span><br>++cIter;<span class="hljs-comment">//没问题</span><br></code></pre></td></tr></table></figure>
+
+<p>const还常用于函数声明，可以关联返回值、各参数；如果是成员函数，还可以修饰函数自身，表示该函数不能改变成员<br>令函数返回一个常量值，往往可以降低调用者错误造成意外，例如</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Rational</span> &#123;&#125;;<br><span class="hljs-type">const</span> Rational <span class="hljs-keyword">operator</span>*(<span class="hljs-type">const</span> Rational&amp; lhs, <span class="hljs-type">const</span> Rational&amp; rhs) &#123;<br>	<span class="hljs-keyword">return</span> <span class="hljs-built_in">Rational</span>();<br>&#125;<br><span class="hljs-comment">//为什么返回一个const对象？</span><br><span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span>==(<span class="hljs-type">const</span> Rational&amp; lhs, <span class="hljs-type">const</span> Rational&amp; rhs) &#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>; &#125;<br><br>Rational a, b, c;<br>(a*b) = c  <span class="hljs-comment">//在a*b的成功上调用operator= 为避免这种情况，因此返回一个const对象</span><br><span class="hljs-comment">//可避免以下情况</span><br><span class="hljs-comment">//if ((a * b) = c) return;</span><br><span class="hljs-keyword">if</span> ((a * b) == c) <span class="hljs-keyword">return</span>;<span class="hljs-comment">//有时手误会在判断中少打一个=，会编译通过，但逻辑就不正常了；使用了const修饰返回值后，就可以在编译期报错</span><br><br></code></pre></td></tr></table></figure>
+
+
+
+<p>const成员函数，目的是确认该成员函数可作用于const对象上，使调用者容易得知哪个函数可以改动对象内容而哪个不行<br>很多人忽视一件事：两个成员函数如果只是常量性不同，可以被重载。这其实很重要，例如:r</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">TextBlock</span> &#123;<br><span class="hljs-keyword">private</span>:<br>	std::string text;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-type">const</span> <span class="hljs-type">char</span>&amp; <span class="hljs-keyword">operator</span>[](std::<span class="hljs-type">size_t</span> position) <span class="hljs-type">const</span> &#123; <span class="hljs-keyword">return</span> text[position]; &#125;<br>	<span class="hljs-type">char</span>&amp; <span class="hljs-keyword">operator</span>[](std::<span class="hljs-type">size_t</span> position) &#123; <span class="hljs-keyword">return</span> text[position]; &#125;<span class="hljs-comment">//如果函数返回类型为内置类型，那么改动返回值不合法，tb[0] = &#x27;x&#x27;;就会编译报错</span><br>	<span class="hljs-comment">//就算返回char合法，tb.text[0]改动的也只是一个拷贝，不是tb[0]本身，也是没有意义的</span><br>&#125;;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">test_const_mf</span><span class="hljs-params">(<span class="hljs-type">const</span> TextBlock&amp; ctb)</span> </span>&#123;<br>	TextBlock tb;<br>	std::cout &lt;&lt; tb[<span class="hljs-number">0</span>] &lt;&lt; std::endl;<span class="hljs-comment">//调用的是non-const的operator[]</span><br>	<span class="hljs-comment">//对于const对象，r passed by reference-to-const</span><br>	std::cout &lt;&lt; ctb[<span class="hljs-number">0</span>] &lt;&lt; std::endl;<span class="hljs-comment">//调用const operator[]</span><br>	<span class="hljs-comment">//ctb[0] = &#x27;x&#x27;;//error,const型不能修改</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p>成员函数是const，有两个流行概念</p>
+<p>bitwise constness(physical constness)：成员函数只有在不更改对象任何成员变量（static除外）时才说是const。即const成员函数不该变对象内任何non-static成员变量</p>
+<p>但这个const性质能够被绕过：一个更改了指针所指物的成员函数虽然不能算是const，但如果只有指针（非所指物）隶属于对象，那么声明为const并不会引起编译器异议</p>
+<p>这是有些矛盾的，举个不够恰当但足以说明问题的例子</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">CTextBlock</span> &#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-type">char</span>&amp; <span class="hljs-keyword">operator</span>[](std::<span class="hljs-type">size_t</span> position) <span class="hljs-type">const</span> &#123; <span class="hljs-keyword">return</span> pText[position]; &#125; <span class="hljs-comment">//bitwisw const 声明不恰当</span><br><span class="hljs-keyword">private</span>:<br>	<span class="hljs-type">char</span>* pText;<br>&#125;;<br><span class="hljs-comment">//class不适当地将其operator[]声明成const成员函数，而该函数却返回一个reference指向对象内部值</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">test_bitwise_const</span><span class="hljs-params">()</span> </span>&#123;<br>	<span class="hljs-type">const</span> CTextBlock cctb;<span class="hljs-comment">//声明常量对象</span><br>	<span class="hljs-type">char</span>* pc = &amp;cctb[<span class="hljs-number">0</span>];<span class="hljs-comment">//调用const operator[]取得指针</span><br>	*pc = <span class="hljs-string">&#x27;Y&#x27;</span>;<span class="hljs-comment">//这样是可行的，但似乎违背了const性质</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>据此，有另一个概念被支持<br>logical constness：一个const成员函数可以修改他所处理对象内的某些bits，但只有客户端侦测不出时才如此<br>继续看这个类：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">CTextBlock_1</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    ...<br>    <span class="hljs-function">std::<span class="hljs-type">size_t</span> <span class="hljs-title">length</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;<br><span class="hljs-keyword">private</span>:<br>	<span class="hljs-type">char</span>* pText;<br>	std::<span class="hljs-type">size_t</span> textLength;    <span class="hljs-comment">//最近一次计算地文本区块长度</span><br>	<span class="hljs-type">bool</span> lengthIsValid;        <span class="hljs-comment">//目前的长度是否有效</span><br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-function">std::<span class="hljs-type">size_t</span> <span class="hljs-title">length</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<br>		<span class="hljs-keyword">if</span> (!lengthIsValid) &#123;<br>			textLength = std::<span class="hljs-built_in">strlen</span>(pText)；<span class="hljs-comment">//在const成员函数内不能赋值给textLength，lengthIsValid</span><br>			lengthIsValid = <span class="hljs-literal">true</span>;  <span class="hljs-comment">//error，编译器不同意在const中修改这两个数据，但实际上可以有这样的需求</span><br>		&#125;<br>		<span class="hljs-keyword">return</span> textLength;<br>	&#125;<br>&#125;;<br><span class="hljs-comment">//length的实现不是bitwise const，因为textLength，lengthIsValid都可以被修改，但是修改对const CtextBlock又可以接受</span><br></code></pre></td></tr></table></figure>
+
+<p>针对这样的需求，可以做这样的修改，使用关键字mutable，释放掉non-static成员变量的bitwise constness约束</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">CTextBlock_2</span> &#123;<br><span class="hljs-keyword">private</span>:<br>	<span class="hljs-type">char</span>* pText;<br>	<span class="hljs-keyword">mutable</span> std::<span class="hljs-type">size_t</span> textLength;<span class="hljs-comment">//mutable修饰的成员变量总是可能会被更改，即使是在const成员函数内</span><br>	<span class="hljs-keyword">mutable</span> <span class="hljs-type">bool</span> lengthIsValid;<span class="hljs-comment">//</span><br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-function">std::<span class="hljs-type">size_t</span> <span class="hljs-title">length</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<br>		<span class="hljs-keyword">if</span> (!lengthIsValid) &#123;<br>			textLength = std::<span class="hljs-built_in">strlen</span>(pText);<span class="hljs-comment">//这样就没问题</span><br>			lengthIsValid = <span class="hljs-literal">true</span>;<span class="hljs-comment">//</span><br>		&#125;<br>		<span class="hljs-keyword">return</span> textLength;<br>	&#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+
+
+<p>在const和non-const成员函数中避免重复<br>如果const和non-const两个函数都需要做很多事情，如下:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">TextBlock_1</span> &#123;<br><span class="hljs-keyword">private</span>:<br>	std::string text;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-type">const</span> <span class="hljs-type">char</span>&amp; <span class="hljs-keyword">operator</span>[](std::<span class="hljs-type">size_t</span> position) <span class="hljs-type">const</span> &#123;<br>		<span class="hljs-comment">//边界校验</span><br>        <span class="hljs-comment">//日志记录</span><br>        <span class="hljs-comment">//数据完整性</span><br>		<span class="hljs-keyword">return</span> text[position];<br>	&#125;<br>	<span class="hljs-type">char</span>&amp; <span class="hljs-keyword">operator</span>[](std::<span class="hljs-type">size_t</span> position) &#123;<br>		<span class="hljs-comment">//边界校验</span><br>        <span class="hljs-comment">//日志记录</span><br>        <span class="hljs-comment">//数据完整性</span><br>		<span class="hljs-keyword">return</span> text[position];  <br>	&#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>这会导致大量的代码重复，维护时会很麻烦；正常的做法通常是实现一次并复用，如下:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">TextBlock_2</span> &#123;<br><span class="hljs-keyword">private</span>:<br>	std::string text;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-type">const</span> <span class="hljs-type">char</span>&amp; <span class="hljs-keyword">operator</span>[](std::<span class="hljs-type">size_t</span> position) <span class="hljs-type">const</span> &#123;<br>		<span class="hljs-comment">//边界校验</span><br>        <span class="hljs-comment">//日志记录</span><br>        <span class="hljs-comment">//数据完整性</span><br>		<span class="hljs-keyword">return</span> text[position];<br>	&#125;<br>	<span class="hljs-type">char</span>&amp; <span class="hljs-keyword">operator</span>[](std::<span class="hljs-type">size_t</span> position) &#123;<br>		<span class="hljs-comment">//转型调用</span><br>        <span class="hljs-comment">//将op[]返回值的const转除为*this加上const调用const op[]</span><br>		<span class="hljs-keyword">return</span> <span class="hljs-built_in">const_cast</span>&lt;<span class="hljs-type">char</span>&amp;&gt;(<span class="hljs-built_in">static_cast</span>&lt;<span class="hljs-type">const</span> TextBlock_2&amp;&gt;(*<span class="hljs-keyword">this</span>)[position]);<br>        <br>	&#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>转型（cast）通常是不建议做的，但本例中其实现是一样的，只是多了一个const修饰，这种情况将返回值const转除是安全的<br>这其中有两次转型动作，第一次是将*this转为const型，否则会一直递归调用自身造成死循环,第二次是将复用了const operator[]后的返回值移除const<br>另外，推荐做法就是用非const调用const，反过来则不好，因为const成员函数承诺不改变对象逻辑状态，所以在其中调用non-const函数可能会破坏这个约束</p>
+<h3 id="条款04：确定对象被使用前已先被初始化"><a href="#条款04：确定对象被使用前已先被初始化" class="headerlink" title="条款04：确定对象被使用前已先被初始化"></a>条款04：确定对象被使用前已先被初始化</h3><ul>
+<li>&#x3D;&#x3D;为内置型对象进行手工初始化，因为c++不保证初始化它们&#x3D;&#x3D;</li>
+<li>&#x3D;&#x3D;构造函数最好使用成员初值列，而不要在构造函数本体内使用赋值操作。初值列列出的成员变量，其排列次序应该和它们在class中的声明次序相同&#x3D;&#x3D;</li>
+<li>&#x3D;&#x3D;未免除”跨编译单元之初始化次序“问题，请以local static对象替换non-local&#x3D;&#x3D;</li>
+</ul>
+<p> 将对象初始化</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">int</span> x;<br></code></pre></td></tr></table></figure>
+
+<p>某些语境下，x被初始化为0，其他语境不保证，例如</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Point</span> &#123;<br><span class="hljs-keyword">private</span>:<br>	<span class="hljs-type">int</span> x, y;<br>&#125;;<br>Point p;<br><span class="hljs-comment">//p的成员有时被初始化，有时则不会</span><br></code></pre></td></tr></table></figure>
+
+<p>读取未初始化值会导致不明确行为，某些平台读到未初始化值会终之程序，还有一些会读取一些半随机bits，污染数据，导致不可预知的结果<br>有一些规则，描述对象初始化动作何时一定发生，何时不一定发生<br>通常如果使用C part of C++并且初始化可能招致运行期成本，那么就不保证发生初始化，而non-C parts of C++不太一样<br>例如array不保证内容初始化，而vector却有此保证<br>这样的规则其实并不容易记，所以最好的办法就是：永远在使用对象之前将其手动初始化</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">int</span> x = <span class="hljs-number">0</span>;<span class="hljs-comment">//手动初始化为0</span><br><span class="hljs-type">const</span> <span class="hljs-type">char</span>* text = <span class="hljs-string">&quot;A C-style string&quot;</span>;<span class="hljs-comment">//对指针手动初始化</span><br><span class="hljs-type">double</span> d;<br>std::cin &gt;&gt; d;<span class="hljs-comment">//使用输入流读取方式完成初始化</span><br></code></pre></td></tr></table></figure>
+
+
+
+<p>如果是内置类型以外任何其他东西，初始化责任在构造函数中进行：确保每个构造函数都将对象的每个成员初始化<br>但要注意，不要混淆赋值和初始化</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">PhoneNumber</span> &#123;&#125;;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">ABEntry</span> &#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-built_in">ABEntry</span>();<br>	<span class="hljs-built_in">ABEntry</span>(<span class="hljs-type">const</span> std::string&amp; name, <span class="hljs-type">const</span> std::string&amp; address, <span class="hljs-type">const</span> std::list&lt;PhoneNumber&gt;&amp; phones);<br><span class="hljs-keyword">private</span>:<br>	std::string theName;<br>	std::string theAddress;<br>	std::list&lt;PhoneNumber&gt; thePhones;<br>	<span class="hljs-type">int</span> numTimesConsulted;<br>&#125;;<br>ABEntry::<span class="hljs-built_in">ABEntry</span>(<span class="hljs-type">const</span> std::string&amp; name, <span class="hljs-type">const</span> std::string&amp; address, <span class="hljs-type">const</span> std::list&lt;PhoneNumber&gt;&amp; phones) &#123;<br>	theName = name;  <span class="hljs-comment">//这都是赋值，而非初始化</span><br>	theAddress = address;<br>	thePhones = phones;<br>	numTimesConsulted = <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这虽然能让对象带有期望值，但并不是最佳做法<br>C++规定，对象成员变量的初始化动作发生在进入构造函数本体之前<br>而进入构造函数本体之后，就都不是初始化，而是被赋值,初始化发生在更早之前<br>一个比较好的写法是，使用member initializtion list</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++">ABEntry::<span class="hljs-built_in">ABEntry</span>(<span class="hljs-type">const</span> std::string&amp; name, <span class="hljs-type">const</span> std::string&amp; address, <span class="hljs-type">const</span> std::list&lt;PhoneNumber&gt;&amp; phones)<br>	:<span class="hljs-built_in">theName</span>(name),<br>	<span class="hljs-built_in">theAddress</span>(address),<br>	<span class="hljs-built_in">thePhones</span>(phones),<br>	<span class="hljs-built_in">numTimesConsulted</span>(<span class="hljs-number">0</span>)<br>&#123;<br>	<span class="hljs-comment">//这样做的结果与上面版本相同，但通常效率更高</span><br>	<span class="hljs-comment">//上面的版本先调用了default构造函数为成员设初值，紧接着对他们赋予新值，构造做的事就浪费了</span><br>	<span class="hljs-comment">//这个版本就避免了这个问题，每个实参都被拿去作为各成员的构造实参（copy构造）</span><br>	<span class="hljs-comment">//所以，比起先调用default构造再调用copy assignment操作符，往往比单调用一次copy构造效率低</span><br>	<span class="hljs-comment">//对于内置类型int，则相同，但为了写法一致，最好都同样使用成员初值列来写</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>无参构造同样适用这样的写法</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++">ABEntry::<span class="hljs-built_in">ABEntry</span>()<br>	:<span class="hljs-built_in">theName</span>(),<br>	<span class="hljs-built_in">theAddress</span>(),<br>	<span class="hljs-built_in">thePhones</span>(),<br>	<span class="hljs-built_in">numTimesConsulted</span>(<span class="hljs-number">0</span>)<br>&#123;<br>	<span class="hljs-comment">//调用各成员的default构造</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>编译器会为用户自定义类型的成员变量自动调用default构造函数——如果那些成员变量在”成员初值列“没有指定初始值的话<br>可以规定自己，总是在初值列中列出所有成员变量，以免需要区分那些成员可以无需初值</p>
+<p>另外，有些情况，即使是内置类型，也必须适用初值列<br>即如果变量是const或references，就一定需要初值，不能被赋值，这也是需要区分的一个点</p>
+<p>所以，为了不去记忆这么多情况，最简单的办法就是，总是使用成员初值列<br>如果class存在多个构造函数，每个构造函数都有自己的成员初值列，会导致很多重复性工作<br>此时则可以合理地将一些赋值表现与初始化表现一样好地成员变量去掉，改用赋值操作；或者根据c++11标准，委托构造地特性，使用一个构造函数给另一个构造函数初始化</p>
+<p>C++中成员初始化次序是固定的<br>base classes更早于其derived classes被初始化；class内成员变量总是以其声明次序被初始化，不受其在初值列中次序影响<br>所以，为了避免一些错误，例如初始化array时需要指定大小，代表大小的那个变量必须先有初值</p>
+<p>不同编译单元内定义的non-local static对象的初始化次序<br>static对象的寿命是从被构造之后直到程序结束<br>这种对象包括global对象、定义于namespace作用域内对象、在class内、在函数内、以及在file作用域内被声明为static的对象<br>其中函数内的static对象是local static对象（相对于函数是本地的，虽然生命周期与程序相同，但可访问范围仅限于函数内），其他static对象成为non-local static对象<br>编译单元指产出单一目标文件的源码，基本上指的是单一源码文件加上其所含头文件<br>在两个源码文件中，都存在non-local static对象，则有一个问题产生：<br>某个编译单元内的某个non-local static对象初始化使用了另一个编译单元内的某个non-local static对象，而这个对象可能并未初始化<br>C++对于定义于不同编译单元的non-local static对象的初始化次序并无明确定义</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">FileSystem</span> &#123;<br><span class="hljs-keyword">private</span>:<br>	<span class="hljs-type">int</span> numDisks_;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-function">std::<span class="hljs-type">size_t</span> <span class="hljs-title">numDisks</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> numDisks_; &#125;<br>&#125;;<br><span class="hljs-comment">//FileSystem tfs;//避免使用这样的一个全局对象</span><br><span class="hljs-function">FileSystem&amp; <span class="hljs-title">tfs</span><span class="hljs-params">()</span> </span>&#123;<br>	<span class="hljs-comment">//用这样一个函数代替一个直接使用的FileSystem对象</span><br>	<span class="hljs-type">static</span> FileSystem fs;<span class="hljs-comment">//定义并初始化一个local static对象</span><br>	<span class="hljs-keyword">return</span> fs;<span class="hljs-comment">//返回一个引用指向该对象</span><br>&#125;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Directory</span> &#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-built_in">Directory</span>();<br>	<span class="hljs-function">Directory&amp; <span class="hljs-title">tempDidr</span><span class="hljs-params">()</span></span>;<br>&#125;;<br>Directory::<span class="hljs-built_in">Directory</span>( params ) &#123;<br>	std::<span class="hljs-type">size_t</span> disks = <span class="hljs-built_in">tfs</span>().<span class="hljs-built_in">numDisks</span>();<br>&#125;<br><span class="hljs-function">Directory <span class="hljs-title">temDir</span><span class="hljs-params">( params )</span></span>;  <span class="hljs-comment">//为临时文件而做出的目录</span><br><br><span class="hljs-comment">//这下初始化次序的重要性显现出来了：除非tfs在tempDir之前被初始化</span><br></code></pre></td></tr></table></figure>
+
+<p>这并不只是因为难以确定，而是在一些情况，甚至没有正确次序可言<br>比如，多个编译单元内的non-local static对象经“模板隐式具现化（implicit template instantiations）”形成<br>小小设计便可以消除这个问题，将每个non-local static对象搬到专属函数内（该对象再次函数内被声明为static），这些函数返回一个reference指向其所指对象，然后用户调用这些方法，这也是单例模式常用手法<br>基于：C++保证函数内local static对象会在函数被调用时、首次遇到该对象定义式时被初始化<br>更好的是，如果从未调用这个函数，则不会引发构造和析构成本（可以说是懒加载）</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">FileSystem</span> &#123;...&#125;;  <span class="hljs-comment">//同前</span><br><span class="hljs-function">FileSystem&amp; <span class="hljs-title">tfs</span><span class="hljs-params">()</span>        <span class="hljs-comment">//这个函数用来替代tfs对象，它在FileSystem calss可能是个static</span></span><br><span class="hljs-function"></span>&#123;                        <span class="hljs-comment">//定义并初始化一个local static对象</span><br>    <span class="hljs-type">static</span> FileSystem fs;<br>    <span class="hljs-keyword">return</span> fs;           <span class="hljs-comment">//返回一个reference指向上述对象</span><br>&#125;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Directory</span>&#123; ... &#125;;   <span class="hljs-comment">//同前</span><br>Directory::<span class="hljs-built_in">Directory</span>(params) <span class="hljs-comment">//同前，但原本的reference to tfs</span><br>&#123;                            <span class="hljs-comment">//现在改为tfs()</span><br>    ...<br>    std::<span class="hljs-type">size_t</span> disks = <span class="hljs-built_in">tfs</span>().<span class="hljs-built_in">numDisks</span>();<br>    ...<br>&#125;<br><span class="hljs-function">Directory&amp; <span class="hljs-title">tempDir</span><span class="hljs-params">()</span>       <span class="hljs-comment">//这个函数用来替代tempDir对象</span></span><br><span class="hljs-function"></span>&#123;                          <span class="hljs-comment">//它在Directory class中可能是一个static</span><br>    <span class="hljs-type">static</span> Directory td;   <span class="hljs-comment">//定义并初始化local static对象</span><br>    <span class="hljs-keyword">return</span> td;             <span class="hljs-comment">//返回一个reference指向上述对象</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p>在多线程环境下，内含static对象的函数被调用时具有不确定性，有一种做法是：<br>在程序单线程启动阶段，手动调用所有reference-returning函数，将所有引用取出，可消除与初始化相关的竞速形式（race conditions）<br>综合起来说<br>手动初始化内置型non-member对象<br>使用成员初值列<br>加强设计，避免一些初始化次序不确定的情况（使用local staic对象代替non-local static对象</p>
+<h2 id="2-构造-x2F-析构-x2F-赋值运算"><a href="#2-构造-x2F-析构-x2F-赋值运算" class="headerlink" title="2. 构造&#x2F;析构&#x2F;赋值运算"></a>2. 构造&#x2F;析构&#x2F;赋值运算</h2><p>###条款05：了解C++默默编写并调用哪些函数                                                                                                                                          </p>
+<p>写一个空类</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Empty</span> &#123;&#125;;<br><span class="hljs-comment">//编译器处理后，会声明一个copy构造、一个copy assignment操作符函数、一个析构函数</span><br><span class="hljs-comment">//如果没有声明任何构造函数，还会声明一个default构造函数</span><br><span class="hljs-comment">//所有这些函数都是public且inline</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">EmptyAfterCompile</span> &#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-built_in">EmptyAfterCompile</span>();          <span class="hljs-comment">//构造函数</span><br>	<span class="hljs-built_in">EmptyAfterCompile</span>(<span class="hljs-type">const</span> EmptyAfterCompile&amp; rhs);   <span class="hljs-comment">//copy构造函数</span><br>	~<span class="hljs-built_in">EmptyAfterCompile</span>(); <span class="hljs-comment">//析构函数</span><br><br>	EmptyAfterCompile&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> EmptyAfterCompile&amp; rhs); <span class="hljs-comment">//copy assignment操作符</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>唯有当这些函数被调用，它们才会被编译器创建出来</p>
+<p>编译器帮我们写的函数都做了哪些事：</p>
+<ul>
+<li><p>default构造和析构函数主要给编译器一个地方放置藏身幕后的代码，像是调用base-classes和non-static成员变量的构造和析构</p>
+</li>
+<li><p>编译器产出的析构函数是一个non-virtual函数，除非这个class的base class自身声明virtual析构函数</p>
+</li>
+<li><p>copy构造和copy assignment操作符，编译器创建的版本只是单纯将源对象的每个non-static成员变量拷贝到目标对象</p>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">NamedObject</span> &#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-built_in">NamedObject</span>(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* name, <span class="hljs-type">const</span> T&amp; value) &#123;&#125;;<br>	<span class="hljs-built_in">NamedObject</span>(<span class="hljs-type">const</span> std::string&amp; name, <span class="hljs-type">const</span> T&amp; value) &#123;&#125;;<br><span class="hljs-keyword">private</span>:<br>	std::string nameValue;<br>	T objectValue;<br>&#125;;<br><span class="hljs-comment">//上面类既没有声明copy构造函数和copy assignment操作符，所以编译器会为其创建（如果被调用），但不会创建default构造（只要有一个构造函数，编译器就不会自动创建默认构造）</span><br><span class="hljs-function">NamedObject&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">no1</span><span class="hljs-params">(<span class="hljs-string">&quot;Smallest Prime Number&quot;</span>, <span class="hljs-number">2</span>)</span></span>;<br><span class="hljs-function">NamedObject&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">no2</span><span class="hljs-params">(no1)</span></span>;<span class="hljs-comment">//调用编译器生成的copy构造</span><br><span class="hljs-comment">//编译器生成的copy构造是以no1.nameValue和no1.objectValue为初值设定no2.nameValue和no2.objectValue</span><br><span class="hljs-comment">//两者中，nameValue类型为string，有copy构造函数，所以no2.nameValue初始化方式是调用string的copy构造并以no1.nameValue为实参</span><br><span class="hljs-comment">//另一个成员objectValue类型是int，是一个内置类型，所以no2.objectValue会以拷贝no1.objectValue内每一个bits来完成初始化</span><br><br><span class="hljs-comment">//内置类型没有拷贝构造一说，基础类型在内存中结构布局比较简单，通常直接从底层拷贝变量所占的整个内存单元即可</span><br><span class="hljs-comment">//编译器生成的copy assignment操作符，行为与copy构造函数基本一样；但不满足条件的话，编译器会拒绝为class生成operator=</span><br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">NamedObject2</span> &#123;<br><span class="hljs-keyword">private</span>:<br>	std::string&amp; nameValue;<span class="hljs-comment">//与上面不同，是一个引用</span><br>	<span class="hljs-type">const</span> T objectValue;<span class="hljs-comment">//与上面不同，是一个const变量</span><br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-comment">//以下构造函数的nameValue不再接收一个const，因为类成员是个string引用</span><br>	<span class="hljs-built_in">NamedObject2</span>(std::string&amp; name, <span class="hljs-type">const</span> T&amp; value) :<span class="hljs-built_in">nameValue</span>(name), <span class="hljs-built_in">objectValue</span>(value) &#123;&#125;;<br>	<span class="hljs-comment">//同样没有operator=</span><br>&#125;;<br><span class="hljs-function">std::string <span class="hljs-title">newDog</span><span class="hljs-params">(<span class="hljs-string">&quot;Moka&quot;</span>)</span></span>;<br><span class="hljs-function">std::string <span class="hljs-title">oldDog</span><span class="hljs-params">(<span class="hljs-string">&quot;Apollo&quot;</span>)</span></span>;<br><span class="hljs-function">NamedObject&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">p</span><span class="hljs-params">(newDog, <span class="hljs-number">2</span>)</span></span>;<br><span class="hljs-function">NamedObject&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">s</span><span class="hljs-params">(oldDog, <span class="hljs-number">3</span>)</span></span>;<br>p = s;<span class="hljs-comment">//可以操作</span><br><span class="hljs-comment">//p = s;//error，不支持赋值操作</span><br><span class="hljs-comment">//两个对象的nameValue都指向string对象，赋值操作如果是p.nameValue指向s.nameValue所指的string，就改变了引用自身</span><br><span class="hljs-comment">//C++不允许让reference改指向不同对象</span><br></code></pre></td></tr></table></figure>
+
+<p>如果打算在内含reference成员的class内支持赋值操作，必须自己定义copy assignment操作符</p>
+<p>内含const成员的class也是一样的，改动const成员是不合法的，编译器不知道如何生成operator&#x3D;</p>
+<p>还有一种情况，就是如果某个base class将copy assignment操作符声明为private，编译器也将拒绝为其derived class生成operator&#x3D;</p>
+<h3 id="条款06：若不想使用编译器自动生成的函数，就改明确拒绝"><a href="#条款06：若不想使用编译器自动生成的函数，就改明确拒绝" class="headerlink" title="条款06：若不想使用编译器自动生成的函数，就改明确拒绝"></a>条款06：若不想使用编译器自动生成的函数，就改明确拒绝</h3><p>有时候，并不想使用编译器自动生成的copy构造和copy assignment操作符<br>其中一个办法是，将两个函数手动声明为private，阻止了编译器生成和使用者调用<br>但并不绝对安全，因为成员函数和friend函数可以调用，除非不去定义它们<br>将成员函数声明为private并故意不去实现是一种常见做法，C++iostream库中ios_base,basic_ios中阻止copying行为</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Home</span> &#123;<br><span class="hljs-keyword">private</span>:<br>	<span class="hljs-built_in">Home</span>(<span class="hljs-type">const</span> Home&amp;);<span class="hljs-comment">//copy构造，只有声明，也就没有必要写参数名称（在传值只需要其类型时也经常这样写）</span><br>	Home&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Home&amp;);<span class="hljs-comment">//copy assignment，只有声明</span><br>	<span class="hljs-comment">//...</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>此方法会在使用者试图拷贝对象时被编译器阻止；但如果自己在成员函数或friend函数之内无意中调用了，会在链接时报错<br>将链接期错误转移至编译期通常是更好的，可以定义一个专门的base class</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Uncopyable</span> &#123;<br><span class="hljs-keyword">protected</span>:<br>	<span class="hljs-built_in">Uncopyable</span>() &#123;&#125;;<br>	~<span class="hljs-built_in">Uncopyable</span>() &#123;&#125;;<span class="hljs-comment">//允许构造和析构</span><br><span class="hljs-keyword">private</span>:<br>	<span class="hljs-built_in">Uncopyable</span>(<span class="hljs-type">const</span> Uncopyable&amp;);<br>	Uncopyable&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Uncopyable&amp;);<span class="hljs-comment">//阻止copying</span><br>&#125;;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">HomeForSale</span>: <span class="hljs-keyword">private</span> Uncopyable &#123; <span class="hljs-comment">//class不再声明copy构造函数或copy assign操作符</span><br>    <br>&#125;<br><span class="hljs-comment">//任何尝试拷贝HomeForSale类都是错误的，因为base class的拷贝函数是private</span><br><br></code></pre></td></tr></table></figure>
+
+<h3 id="条款07：为多态基类声明virtual析构函数"><a href="#条款07：为多态基类声明virtual析构函数" class="headerlink" title="条款07：为多态基类声明virtual析构函数"></a>条款07：为多态基类声明virtual析构函数</h3><ul>
+<li>polymorphic（带多态性质的）base classes应该声明一个virtual析构函数。如果class带有任何virtual函数，它就应该拥有一个virtual析构函数</li>
+<li>Classes的设计目的如果不是作为base classes使用，或不是为了具备多态性，就应该声明virtual析构函数</li>
+</ul>
+<p>在工厂（factory）函数中，搭配多态的性质，一般会返回一个base class指针，指向新生成的derived class对象<br>返回的对象位于堆（heap）中，为了避免内存泄漏，都应在适当位置delete<br>在删除时，使用的时base class指针，删除的对象是drived class对象，如果base class有一个non-virtual析构函数，会产生问题<br>经常会发生的是对象的derived成分没被销毁，而virtual关键字可以解决这个问题；虚的机构函数能够保证，基类指针指向子类对象时，会析构掉子类对象的部分<br>当class不被当成base class，令其析构为虚函数并不合理，每个带有virtual函数的class都有一个对应的vtbl（虚函数表）由一个vptr指向<br>这会增加对象的体积<br>所以，一般当class内至少有一个virtual函数（代表可能是多态情况），才将析构函数声明为virtual<br>另外切勿试图继承“带有non-virtual析构函数”的class，否则可能因为对象销毁不彻底而出现错误</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">SpecialString</span> : <span class="hljs-keyword">public</span> std::string &#123;&#125;;<span class="hljs-comment">//试图继承string</span><br><br>SpecialString* pss = <span class="hljs-keyword">new</span> <span class="hljs-built_in">SpecialString</span>();<br>std::string* ps;<br>ps = pss;<br><span class="hljs-keyword">delete</span> ps;<span class="hljs-comment">//SpecialString析构不会被调用，会有资源泄漏</span><br></code></pre></td></tr></table></figure>
+
+<p>声明为virtual的函数若没有实现，则成为纯虚函数（pure virtual）<br>带有纯虚函数的类为抽象类，不能被实例化</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">AMOV</span> &#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">AMOV</span>() = <span class="hljs-number">0</span>;<span class="hljs-comment">//声明pure virtual析构函数定义</span><br>&#125;;<br><span class="hljs-comment">//因为class有pure virtual函数，所以是抽象类</span><br><br><span class="hljs-comment">//析构的机制是，最深层派生的class析构最先被调用，之后层层向上；编译器会在AMOV的派生类的析构函数中创建一个对~AMOV的调用</span><br><span class="hljs-comment">//对此，单纯的声明为纯虚函数会造成链接错误，所以需要提供一个定义</span><br>AMOV::~<span class="hljs-built_in">AMOV</span>() &#123;&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="条款08：别让异常逃离析构函数"><a href="#条款08：别让异常逃离析构函数" class="headerlink" title="条款08：别让异常逃离析构函数"></a>条款08：别让异常逃离析构函数</h3><ul>
+<li>析构函数绝对不要吐出异常。如果一个被析构函数调用的函数可能抛出异常，析构函数应该捕捉任何异常，然后吞下它们或结束程序</li>
+<li>如果客户需要对某个操作函数运行期间抛出的异常做出反应，那么class应该提供一个普通函数执行该操作</li>
+</ul>
+<p>C++不禁止析构函数抛异常，但不鼓励这样做</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Widget</span> &#123;<br><span class="hljs-keyword">public</span>:<br>	~<span class="hljs-built_in">Widget</span>() &#123;&#125;<span class="hljs-comment">//假设可能抛异常</span><br>&#125;;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">doSomething</span><span class="hljs-params">()</span> </span>&#123;<br>	std::vector&lt;Widget&gt; v;<br>	<span class="hljs-comment">//...</span><br>&#125;   <span class="hljs-comment">// v在这里被自动毁灭</span><br><span class="hljs-comment">//当vector被销毁，销毁时析构内含所有Widgets</span><br><span class="hljs-comment">//若含有多个Widgets，在析构第一个元素时抛出异常，其他几个还是应该被销毁，继续调用的时候，又抛出异常</span><br><span class="hljs-comment">//当异常同时发生时，程序可能会结束执行或者导致不明确行为</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">DBConnection</span> &#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-function"><span class="hljs-type">static</span> DBConnection&amp; <span class="hljs-title">create</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-type">static</span> DBConnection db;<span class="hljs-comment">//模拟一个DB连接对象</span><br>		<span class="hljs-keyword">return</span> db;<br>	&#125;<br>	<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">close</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-comment">//关闭连接，错误时抛异常</span><br>	&#125;<br>&#125;;<br><span class="hljs-comment">//为了确保客户不忘记DBConnection对象身上调用close(),创建一个用来管理的DBConnectoin资源class，析构函数调用close</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">DBManager</span> &#123;<br><span class="hljs-keyword">private</span>:<br>	DBConnection db;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-built_in">DBManager</span>(DBConnection&amp; dbc) :<span class="hljs-built_in">db</span>(dbc) &#123;&#125;<br>	~<span class="hljs-built_in">DBManager</span>();<br>	&#123;<br>		db.<span class="hljs-built_in">close</span>();<br>	&#125;<br>&#125;;<br><span class="hljs-function">DBManager <span class="hljs-title">dbm</span><span class="hljs-params">(DBConnection::create())</span></span>;<br>	<span class="hljs-comment">//...</span><br>	<span class="hljs-comment">//离开作用域后，局部变量销毁，如果此时close产生异常，则难以处理</span><br><span class="hljs-comment">//解决方法一：</span><br>DBManager::~<span class="hljs-built_in">DBManager</span>() &#123;<br>	<span class="hljs-keyword">try</span> &#123;<br>		db.<span class="hljs-built_in">close</span>();<br>	&#125;<br>	<span class="hljs-built_in">catch</span> (...) &#123;<br>		<span class="hljs-comment">//关闭程序或做日志记录</span><br>	&#125;<br>&#125;<br><span class="hljs-comment">//这并非最佳做法，因为有些错误是不该被忽略的，可以重新设计</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">DBManager2</span> &#123;<br><span class="hljs-keyword">private</span>:<br>	DBConnection db;<br>	<span class="hljs-type">bool</span> closed;<span class="hljs-comment">//记录状态</span><br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">close</span><span class="hljs-params">()</span> </span>&#123;<br>		db.<span class="hljs-built_in">close</span>();<br>		closed = <span class="hljs-literal">true</span>;<br>	&#125;<br>	~<span class="hljs-built_in">DBManager2</span>() &#123;<br>		<span class="hljs-keyword">if</span> (!closed) &#123;<br>			<span class="hljs-keyword">try</span> &#123;<br>				db.<span class="hljs-built_in">close</span>();<br>			&#125;<br>			<span class="hljs-built_in">catch</span> (...) &#123;<br>				<span class="hljs-comment">//关闭程序或记录日志</span><br>			&#125;<br>		&#125;<br>	&#125;<br>&#125;;<br><span class="hljs-comment">//这就将close可能产生的问题交给调用者自行处理</span><br><span class="hljs-comment">//虽然析构中还是可能忽略异常，但至少提供了处理异常的可能性</span><br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="条款09：绝不在构造和析构过程中调用virtual函数"><a href="#条款09：绝不在构造和析构过程中调用virtual函数" class="headerlink" title="条款09：绝不在构造和析构过程中调用virtual函数"></a>条款09：绝不在构造和析构过程中调用virtual函数</h3><ul>
+<li>在构造函数和析构函数期间不要调用virtual函数，因为此类调用从不下制dervied class（比起当前的构造函数和析构函数的那层）</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">BaseClass</span> &#123;  <span class="hljs-comment">//所有交易的base class</span><br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-built_in">BaseClass</span>();<br>	<span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">log</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>= <span class="hljs-number">0</span>; <span class="hljs-comment">//做一份因类型不同而不同的日志记录</span><br>&#125;;<br>BaseClass::<span class="hljs-built_in">BaseClass</span>() &#123;  <span class="hljs-comment">//baseclass构造函数实现</span><br>	<span class="hljs-built_in">log</span>();<span class="hljs-comment">//最后动作是志记这笔交易</span><br>&#125;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">BaseClass::log</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;&#125; <span class="hljs-comment">//纯虚函数也要给一个定义，否则无法链接</span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">DerivedClass</span> : <span class="hljs-keyword">public</span> BaseClass &#123; <span class="hljs-comment">//derived class</span><br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">log</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<br>		std::cout &lt;&lt; <span class="hljs-string">&quot;DerivedClass log()&quot;</span> &lt;&lt; std::endl;<br>	&#125;<br>&#125;;<br>	<br>DerivedClass d;<span class="hljs-comment">//不会调用Derived Class的log</span><br><br></code></pre></td></tr></table></figure>
+
+<p>在派生类被构造前，基类构造先进行，此时调用的log为base class中的log<br>相对于derived class来说，base class构造期间，虚函数表中只有base class的virtual函数<br>或者可以说，base class构造期间，virtual函数不是virtual函数<br>这对语言来说是合理的，当base class构造执行时derived class成员尚未初始化，如果此时调用virtual下降到derived class层，则极有可能使用到派生类的未初始化成员<br>这样做是危险的，所以C++不允许这样做<br>更根本的原因是<br>在derived class对象的base class构造期间，对象类型会被看作base class，所以virtual函数会被编译器resolve to base class<br>只有当对象在derived class构造函数开始执行时，才会成为一个derived class对象</p>
+<p>这个行为同理于析构函数<br>一旦derived class析构函数执行，对象内的derived class成员便呈现未定义值，进入base class时，便成为一个base对象</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//一个解决方案是，在derived class构造函数传递必要信息给base class构造，然后在基类中以non-virtual形式调用函数</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">BaseClass2</span> &#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">BaseClass2</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; logInfo)</span></span>;<br>	<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">log</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; logInfo)</span> <span class="hljs-type">const</span> </span>&#123;&#125;;<span class="hljs-comment">//声明为non-virtual函数</span><br>&#125;;<br>BaseClass2::<span class="hljs-built_in">BaseClass2</span>(<span class="hljs-type">const</span> std::string&amp; logInfo) &#123;<br>	<span class="hljs-built_in">log</span>(logInfo);<br>&#125;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">DerivedClass2</span> :<span class="hljs-keyword">public</span> BaseClass2 &#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-built_in">DerivedClass2</span>(<span class="hljs-comment">/*params*/</span>) :<span class="hljs-built_in">BaseClass2</span>(<span class="hljs-built_in">createLogString</span>(<span class="hljs-comment">/*params*/</span>)) &#123;&#125;;<span class="hljs-comment">//将信息传给基类</span><br><span class="hljs-keyword">private</span>:<br>	<span class="hljs-function"><span class="hljs-type">static</span> std::string <span class="hljs-title">createLogString</span><span class="hljs-params">(<span class="hljs-comment">/*params*/</span>)</span> </span>&#123; <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;DerivedClassLog&quot;</span>; &#125;<br>	<span class="hljs-comment">//比起在成员初值列内给予基类所需数据，使用一个辅助函数往往更好，并且声明为static也就不可能指向未初始化变量</span><br>&#125;;     <br></code></pre></td></tr></table></figure>
+
+<h3 id="条款10：令operator-x3D-返回一个reference-to-this"><a href="#条款10：令operator-x3D-返回一个reference-to-this" class="headerlink" title="条款10：令operator&#x3D;返回一个reference to *this"></a>条款10：令operator&#x3D;返回一个reference to *this</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//赋值形式</span><br><span class="hljs-type">int</span> x, y, z;<br>x = y = z = <span class="hljs-number">7</span>;<span class="hljs-comment">//连续赋值，符合右结合律，解析为x=(y=(z=7)));</span><br><span class="hljs-comment">//为了支持这种赋值方式，赋值操作符函数必须返回一个reference指向操作符左侧实参，而class中成员函数的左侧实参一般为*this被省略，所以写法如下</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Widget1</span> &#123;<br><span class="hljs-keyword">public</span>:<br>	Widget1&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Widget1&amp; rhs) &#123;<br>		<span class="hljs-comment">//...</span><br>		<span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<span class="hljs-comment">//返回左侧对象，也就是当前对象</span><br>	&#125;<br>&#125;;<br><span class="hljs-comment">//此协议同样适用于其他赋值运算（并不是强制要求，但最好都来遵守的协定）+=,-=,*=</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="条款11：在operator-x3D-中处理”自我赋值“"><a href="#条款11：在operator-x3D-中处理”自我赋值“" class="headerlink" title="条款11：在operator&#x3D;中处理”自我赋值“"></a>条款11：在operator&#x3D;中处理”自我赋值“</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Widget2</span> &#123;&#125;;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">test_assignment_to_self</span><span class="hljs-params">()</span> </span>&#123;<br>	Widget2 w;<br>	<span class="hljs-comment">//...</span><br>	w = w;<span class="hljs-comment">//赋值给自己，虽然不合理但合法</span><br>	<span class="hljs-comment">//有时不会这么明显，例如</span><br>	Widget2 w1;<br>	Widget2 w_arr[<span class="hljs-number">3</span>] = &#123; w,w1,w &#125;;<br>	<span class="hljs-comment">//...</span><br>	w_arr[<span class="hljs-number">0</span>] = w_arr[<span class="hljs-number">2</span>];<br>	<span class="hljs-comment">//或者两个指针指向同一个东西，也是潜在的自我赋值</span><br>	Widget2* pw1, * pw2;<br>	pw1 = &amp;w;<br>	pw2 = &amp;w;<br>	*pw1 = *pw2;<br>&#125;<br><span class="hljs-comment">//这些不明显的自我赋值，一般来说是别名带来的结果</span><br><span class="hljs-comment">//如果某段代码操作pointers或references而他们被用来指向多个相同类型对象，就需要考虑对象是否为同一个（多态使用中不同类型指针也可能指向同一个对象）</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Base</span> &#123;.....&#125;;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Dervied</span>: <span class="hljs-keyword">public</span> Base &#123;...&#125;;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">dosomething</span><span class="hljs-params">(<span class="hljs-type">const</span> Base&amp; rb,Dervied* pd)</span>  <span class="hljs-comment">//rb和*pd有可能其实是同一对象</span></span><br></code></pre></td></tr></table></figure>
+
+<p>当使用对象来自行管理资源，可能会出现停止使用资源前就释放了</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Bitmap</span> &#123;&#125;;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Widget</span> &#123;<br>	<span class="hljs-comment">//位图类，一般需要自己管理资源分配</span><br><span class="hljs-keyword">private</span>:<br>	Bitmap* pw;<span class="hljs-comment">//指向一个堆中分配的对象</span><br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-built_in">Widget</span>() &#123;<br>		pw = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Bitmap</span>();<br>	&#125;<br>	Widget&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Widget&amp; rhs) &#123;<br>		<span class="hljs-keyword">delete</span> pw;<span class="hljs-comment">//删除当前所指对象</span><br>		pw = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Bitmap</span>(*rhs.pw);<span class="hljs-comment">//重新在堆中分配一个对象并令成员指针指向它</span><br>		<span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<span class="hljs-comment">//符合条款10</span><br>	&#125;<br>    <span class="hljs-comment">//上述代码表面合理，但自我赋值时不安全</span><br>	<span class="hljs-comment">//如果*this和rhs为同一个对象，delete执行后，rhs的A对象也被销毁了，操作完成后，对象持有一个指针指向一个已被删除的对象</span><br>    <br>	Widget&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Widget&amp; rhs);<br>	<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(Widget3&amp; rhs)</span></span>;<br>&#125;;<br><span class="hljs-comment">//所以需要在赋值操作符的最前端做一个证同测试，检测是否为自身赋值</span><br>Widget&amp; Widget3::<span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Widget&amp; rhs) &#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span> == &amp;rhs) <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<span class="hljs-comment">//如果是自身，直接返回,证同测试</span><br>	<span class="hljs-keyword">delete</span> pw;<br>	pw = <span class="hljs-keyword">new</span> <span class="hljs-built_in">A</span>(*rhs.pw);<br>	<span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>&#125;<br><span class="hljs-comment">//另外，除了自我赋值安全，operator=还通常需要处理“异常安全性”，而异常安全性处理之后，往往自动获得自我赋值安全性</span><br>Widget&amp; Widget::<span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Widget&amp; rhs) &#123;<br>	Bitmap* pOri = pw;<span class="hljs-comment">//记录下之前pw</span><br>	pw = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Bitmap</span>(*rhs.pw);<span class="hljs-comment">//令pw指向新的副本</span><br>	<span class="hljs-keyword">delete</span> pOri;<span class="hljs-comment">//此时再去删除原来的pw</span><br>	<span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>&#125;<br><span class="hljs-comment">//这样即使new操作由于内存不足等原因抛出异常，即使没有证同测试，这段代码还是能处理自我赋值，只是效率没有上面的方式高</span><br><br>··<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/C/">#C++</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Effective C++</div>
+      <div>http://example.com/2022/11/24/Effective-C/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Locvye</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年11月24日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/10/09/%E5%89%8D%E7%BC%80%E5%92%8C%E6%95%B0%E7%BB%84%E5%92%8C%E5%B7%AE%E5%88%86%E6%95%B0%E7%BB%84/" title="MYSQL基础知识点">
+                        <span class="hidden-mobile">MYSQL基础知识点</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
