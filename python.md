@@ -293,15 +293,11 @@ print(tuple_01*2)  #(1,2,3,1,2,3)
 
 
 
-## 数据类型方法
-
-### Dict方法
-
 
 
 ## 类
 
-#### 定义
+#### 定义 
 
 ##### 类的关键字
 
@@ -315,7 +311,7 @@ print(tuple_01*2)  #(1,2,3,1,2,3)
 class Person(object):
     name = '小慕'
     def dump(self):
-        print(f'{self.name}')
+        print(f'{self.name} is dumping')
 
 xiaomu = Person()   # 类的实例化
 print(xiaomu.name)  # 调用属性
@@ -325,6 +321,7 @@ xiaomu.dump()       # 调用函数
 ##### 类的参数self
   + self是类函数中必传参数，且必须放在第一个参数位置
   + self是一个对象，他代表实例化的变量自身
+  + self可以直接通过点来定义一个类变量
   + self中的变量与含有self参数的函数可以在类中任意一个函数内随意调用
 
 ```python
@@ -346,7 +343,7 @@ class Person1(object):
         xiaomu = Person1('小慕',32)
 xiaomu.run()
 xiaomu.jump()
-# 每个实例化对象定义的不同
+# 每个实例化对象可以自定义属性
 xiaomu.top = 174
 print(xiaomu.top)
 xiaomu.work()
@@ -354,18 +351,34 @@ xiaomu.work()
 
 ##### 构造函数的创建
 
++ 类中的一种默认函数，用来将类实例化的同时，将参数传入类中
+
 ```python
 # def _init_(self,a,b):
 #     self.a = a
 #     self.b = b
 
-# 对象的生命周期
+    def __init__(self,name,age):
+        self.name = name
+        self.age = age
+
+    def run(self):
+        print(f'{self.name} is running')
+
+
+xiaomu = Person('小慕',22)
+xiaomu.run()
 ```
+
+##### 对象的生命周期
+
++ 实例化_init_ ：对象生命的开始		内存中分配一个内存块
++ __del__: 删除对象
 
 ##### 私有函数和私有变量
 
 ```python
-# 无法被实例化后的对象调用的类中的函数与变量
+# 无法被实例化后的对象调用 类中的函数与变量
 # 类内部可以调用私有函数与变量
 # 只希望类内部业务调用使用，不希望被使用者调用
 
@@ -373,6 +386,7 @@ xiaomu.work()
 class Cat(object):
     def __init__(self, name):
         self.name = name
+        self.__age = 33
 
     def run(self):
         result = self.__run()
@@ -390,51 +404,68 @@ cat.run()
 cat.jump()
 ```
 
+##### 封装
+
++ 将不对外的私有属性和方法通过可对外使用的函数而使用（类中定义私有的，只有类内部使用，外部无法访问）
+
+  ```python
+  class Parent(object):
+      def __hello(self,data):
+          print('hello %S'%data)
+      def helloworld(self):
+          self.__hello('world')
+  ```
+
 #### 装饰器
 
 ##### 定义
 + 也是一种函数
 + 可以接收函数作为参数,可以返回函数
 + 接收一个函数，内部对其处理，然后返回一个新函数，动态的增强函数功能
-+ 将c函数在a函数中执行，在a函数中可以选择执行或不执行c函数，也可以对c函数的结果进行二次加工处理
++ 将c函数在a函数(装饰器)中执行，在a函数中可以选择执行或不执行c函数，也可以对c函数的结果进行二次加工处理
 
  ```python
  def out(func_args):     外围函数
     def inter(*args,**kwargs):      内嵌函数
-        return func_argc(*args,**kwargs)
+        return func_args(*args,**kwargs)
     return inter        外为函数返回内嵌函数
  ```
 
 ##### 装饰器用法
 
-+ 将被调用的函数直接作为参数传入装饰器的外围函数括弧
++ 将被调用的函数直接作为参数传入装饰器的外围函数
 + 将装饰器与被调用函数绑定在一起
 + @符号+装饰器函数放在被调用函数的上一行，被调用的函数正常定义，只需要直接调用被执行函数即可
 
 ```python
-def check_str(func):
+def Check_str(func):
     print('func:',func)
     def inner(*args, **kwargs):
-        print('args:',args,kwargs)
+        print('args:', args, 'kwargs:', kwargs)
         result = func(*args, **kwargs)
         if result == 'ok':
             return 'result is %s' % result
         else:
-            return 'result is failed:%s' % result
+            return 'result is Fail: %s' % result
+
     return inner
 
-@check_str
-def test(data):
-    return data
+@Check_str
+def test(str):
+    return str
 
-result = test('no')
-print(result)
+test1 = test('ok')
+print(test1)
+test2 = test('no')
+print(test2)
 ```
 
 ##### classmethod功能 and staticmethod的功能
 
++ classmethod将类函数可以不经过实例化而直接调用
++ 该类函数可以不经过实例化而直接被调用，被该装饰器调用的函数不许传递self或cls参数，且无法再该函数内调用其他类函数或类变量
+
 ```python
-# 将类函数可以不经过实例化而直接被调用
 # 用法:
 #   @classmethod
 #   def func(cls,...):
@@ -443,52 +474,66 @@ print(result)
 
 class Test(object):
     def __init__(self,a):
-        self.a=a
+        self.a = a
 
     def run(self):
         print('run')
+        self.dump() # 可以调用classmethod函数
+        self.sleep() # 可以调用staticmethod函数
+
     @classmethod
     def dump(cls):
         print('dump')
-        # cls.run()  # 不能调用
+        # cls.run() 报错 无法在classmethod 中调用self函数
+
     @staticmethod
     def sleep():
-        print('i want sleep')
-t = Test('a')
-t.run()
-Test.dump()
-Test.sleep()
-t.sleep()
-t.dump()
+        print('i want to sleep')
 
-# staticmethod的功能
-# 该类函数可以不经过实例化而直接被调用，，被该装饰器调用的函数不许传递self或cls参数，且无法再该函数内调用其他类函数或类变量
+t = Test(1)
+t.run()
+print('________')
+# Test.run()  报错
+Test.dump()
+print('________')
+Test.sleep()
+t.sleep() #实例化对象可以调用staicmethod函数
+t.dump() #实例化对象可以调用classmethod函数
+
+# 用法:
+#   @staticmedthod
+#   def func(...):
+#       do
+# 参数介绍: 函数体内无cls或self参数
+
 ```
 
 ##### property 功能
 
 + 把函数当作变量
-+ 将类函数的执行免区括弧，类似与调用属性(变量)
++ 将类函数的执行免去括弧，类似与调用变量
 
 ```python
 # @property
 # def func(self)
 #   do
 
-class Test1(object):
+class Test2(object):
     def __init__(self,name):
-        self.__name=name
+        self.__name = name
 
     @property
     def name(self):
         return self.__name
     @name.setter
     def name(self,value):
-        self.__name=value
-t1 = Test1(name='dewei')
-print(t1.name)
-t1.name='小慕'
-print(t1.name)
+        self.__name = value
+
+t2 = Test2('dewei')
+print(t2.name)
+
+t2.name = 'xiaomu'
+print(t2.name)
 ```
 
 #### 继承
@@ -517,16 +562,23 @@ class Child(Parent):
 
 ##### super函数的作用
 
-+ 子类继承父类的方法而使用的关键字，当子类继承父类后，就可以使用父类的方法
++ 子类继承父类的方法而使用的关键字，使得子类也执行父类方法
 
   ```python
   class Parent(object):
-      def __init__(self):
-          print('hello i am parent')
+  class Parent(object):
+      def __init__(self, p):
+          self.p = p
+          print('hello i am %s' % self.p)
+  
   class Child(Parent):
-      def __init__(self):
-          print('hello i am child')
-          super(Child,self).__init__  #改写后使用Parent类的函数
+      def __init__(self, c, p):
+          self.c = c
+          super().__init__(p)
+          print('hello i am %s' % self.c)
+  
+  if __name__ == '__main__':
+      child1 = Child('child', 'parent')
       
   ```
 
@@ -543,6 +595,8 @@ class Child(Parent):
   
 
 #### 多态
+
++ 同一功能的多状态化
 
 + 子类中重写父类的方法
 
@@ -568,30 +622,46 @@ if __name__ == '__main__':
 
 #### 类的高级函数
 
++ _str_的功能
+  如果定义了该函数，当print当前实例化对象的时候，会返回str函数的return信息
+
++ _getattr_的功能
+  当调用的属性或者方法不存在时，会返回getattr方法定义的信息
+
++ _setattr_的功能
+  拦截当前类中不存在的属性与值
+
++ _call_的功能
+  本质是将一个类变成一个函数
+
 ```python
-#_str_的功能
-#如果定义了该函数，当print当前实例化对象的时候，会返回该函数的return信息
+#_str_
 #用法:
 	def _str_(self):
         return str_type
 # 返回值: 返回对于该类的描述信息
-class Test(object):
-    def _str_(self):
-        return '这是关于这个类的描述'
-test = Test()
-print(test)
-
-#_getattr_的功能
-#当调用的属性或者方法不存在时，会返回该方法定义的信息
+#_getattr_
 #用法:
-	def _getattr_(self):
+	def _getattr_(self,key):
         print(something...)
 #参数:
 #	key:调用任意不存在的属性名
 #	返回值: 可以任意类型也可以不返回
 
-#__setattr_的功能
-#拦截当前类中不存在的属性与值
+class Test(object):
+
+    def __str__(self):
+        return 'this is a test class'
+
+    def __getattr__(self, key):
+        print('这个key:{} 并不存在'.format(key))
+
+t = Test()
+print(t)
+t.a
+
+
+#__setattr_
 #用法:
 	def _setattr_(self):
         self._dict_[key] = value
@@ -600,18 +670,52 @@ print(test)
 #	value:当前的参数对应的值
 #	返回值: 无
 
-
-
-# _call_的功能
-# 本质是将一个类变成一个函数
+# _call_
 #用法:
 	def _call_(self，*args，**kwargs):
         print(something...)
 #参数: 可传任何参数
 #返回值: 与函数情况相同可有可无
 
+class Test(object):
+
+    def __str__(self):
+        return 'this is a test class'
+
+    def __getattr__(self, key):
+        print('这个key:{} 并不存在'.format(key))
+
+    def __setattr__(self, key, value):
+        self.__dict__[key] = value
+        print(key, value)
+    def __call__(self,a):
+        print('call func will start')
+        print(a)
+
+t = Test()
+print(t)
+t.a
+t.name = '小慕'
+t('deiwei')
 
 
+class Test2(object):
+    def __init__(self,attr=''):
+        self.__attr = attr
+
+    def __call__(self):
+        print('key is {}'.format(self.__attr) )
+
+    def __getattr__(self,key):
+        if self.__attr:
+            key = '{}.{}'.format(self.__attr,key)
+        else:
+            key = key
+        print(key)
+        return Test2(key)
+
+t2 = Test2()
+t2.a.b.c()
 ```
 
 
